@@ -12,7 +12,13 @@ function Login() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    function attemptLogin() {
+    function attemptLogin(event) {
+        event.preventDefault()
+        if(!email || !password){
+            setErrorMessage('All fields are required');
+            return
+        }
+
         const users = JSON.parse(localStorage.getItem('users')) || [];
 
         const user = users.find(
@@ -33,36 +39,40 @@ function Login() {
             setErrorMessage('Invalid email or password');
         }
     }
-    return (<div>
+    return <div>
         <Navbar/>
-        <div className="container">
+        <div className="container-fluid col-6">
             <div className="row">
-                <div className="col-8 offset-2">
-                    <h1>Login</h1>
-                    {errorMessage?<div className="alert alert-danger">{errorMessage}</div>:''}
+                <h1>Login</h1>
+                {errorMessage?<div className="alert alert-danger">{errorMessage}</div>:''}
+                <form onSubmit={attemptLogin}>
                     <div className="form-group">
-                        <label>Email:</label>
+                        <label for="email">Email:</label>
                         <input type="text"
+                        id="email"
                         className="form-control"
                         value={email}
-                        onInput={(event)=>setEmail(event.target.value)}
+                        onChange={(event)=>setEmail(event.target.value)}
                         />
                     </div>
                     <div className="form-group">
-                        <label>Password:</label>
+                        <label for="password">Password:</label>
                         <input type="password"
+                        id="password"
                         className="form-control"
                         value={password}
-                        onInput={(event)=>setPassword(event.target.value)}
+                        onChange={(event)=>setPassword(event.target.value)}
                         />
                     </div>
                     <div className="form-group">
-                        <button className="btn btn-primary float-right" onClick={attemptLogin}>Login</button>
+                        <button className="btn btn-primary float-right" >
+                            Login
+                        </button>
                     </div>
-                </div>
-            </div>
+                </form>
+            </div> 
         </div>
-    </div>)
+    </div>
 }
 
 export default checkGuest(Login);

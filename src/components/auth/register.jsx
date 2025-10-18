@@ -10,7 +10,8 @@ function Register() {
     let [passwordConf, setPasswordConf] = useState('');
     let [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
-    function registerUser(){
+    function registerUser(event){
+        event.preventDefault();
         if(!name || !password || !passwordConf || !email){
             setErrorMessage('All Fields are required!');
             return
@@ -27,12 +28,13 @@ function Register() {
             user => user.email === email
         )
         if(userExists){
-            setErrorMessage('A Email is already taken');
+            setErrorMessage('Email is already taken');
             return
         }
 
         const newUser = {name,email,password};
-        existingUsers.push(newUser);    localStorage.setItem('users',JSON.stringify(existingUsers));
+        existingUsers.push(newUser);    
+        localStorage.setItem('users',JSON.stringify(existingUsers));
 
         setErrorMessage('');
         alert('Registration Successful');
@@ -41,47 +43,53 @@ function Register() {
     }
     return <div>
         <Navbar/>
-        <div className="container">
+        <div className="container-fluid col-6 ">
             <div className="row">
-                <div className="col-8 offset-2">
-                    <h1>Register</h1>
-                    {errorMessage?<div className="alert alert-danger">{errorMessage}</div>:''}
+                <h1>Register</h1>
+                {errorMessage?<div className="alert alert-danger">{errorMessage}</div>:''}
+                <form onSubmit={registerUser}>
                     <div className="form-group">
-                        <label>Name:</label>
+                        <label for="name">Name:</label>
                         <input type="text"
                         className="form-control"
+                        id="name"
                         value={name}
-                        onInput={(event)=>setName(event.target.value)}
+                        onChange={(event)=>setName(event.target.value)}
                         />
                     </div>
                     <div className="form-group">
-                        <label>Email:</label>
+                        <label for="email">Email:</label>
                         <input type="text"
+                        id="email"
                         className="form-control"
                         value={email}
-                        onInput={(event)=>setEmail(event.target.value)}
+                        onChange={(event)=>setEmail(event.target.value)}
                         />
                     </div>
                     <div className="form-group">
-                        <label>Password:</label>
+                        <label for="password" >Password:</label>
                         <input type="password"
+                        id="password"
                         className="form-control"
                         value={password}
-                        onInput={(event)=>setPassword(event.target.value)}
+                        onChange={(event)=>setPassword(event.target.value)}
                         />
                     </div>
                     <div className="form-group">
-                        <label>Confirm Password:</label>
+                        <label for="passwordConf">Confirm Password:</label>
                         <input type="password"
+                        id="passwordConf"
                         className="form-control"
                         value={passwordConf}
-                        onInput={(event)=>setPasswordConf(event.target.value)}
+                        onChange={(event)=>setPasswordConf(event.target.value)}
                         />
                     </div>
                     <div className="form-group">
-                        <button className="btn btn-primary float-right" onClick={registerUser}>Submit</button>
+                        <button className="btn btn-primary float-right" >
+                            Submit
+                        </button>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
     </div>
